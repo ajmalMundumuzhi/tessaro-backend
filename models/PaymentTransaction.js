@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const orderItemSchema = new mongoose.Schema(
+const paymentTransactionSchema = new mongoose.Schema(
   {
     orderId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -8,34 +8,27 @@ const orderItemSchema = new mongoose.Schema(
       required: true,
     },
 
-    productId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
+    gateway: {
+      type: String,
       required: true,
+      trim: true,
     },
 
-    variantId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "ProductVariant",
-      default: null,
+    transactionId: {
+      type: String,
+      trim: true,
     },
 
-    quantity: {
-      type: Number,
-      required: true,
-      min: 1,
-    },
-
-    price: {
+    amount: {
       type: Number,
       required: true,
       min: 0,
     },
 
-    total: {
-      type: Number,
-      required: true,
-      min: 0,
+    status: {
+      type: String,
+      enum: ["pending", "success", "failed", "refunded"],
+      default: "pending",
     },
   },
   {
@@ -43,4 +36,7 @@ const orderItemSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("OrderItem", orderItemSchema);
+module.exports = mongoose.model(
+  "PaymentTransaction",
+  paymentTransactionSchema
+);

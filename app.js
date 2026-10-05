@@ -5,6 +5,8 @@ const cors = require("cors");
 const compression = require("compression");
 const cookieParser = require("cookie-parser");
 
+const uploadRoutes = require("./routes/upload.routes");
+
 const app = express();
 const errorMiddleware = require("./shared/middleware/error.middleware");
 
@@ -18,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/v1", routes);
+app.use("/api/upload", uploadRoutes);
 
 app.get("/", (req, res) => {
     res.send("Welcome to the API");

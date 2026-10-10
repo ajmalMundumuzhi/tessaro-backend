@@ -24,8 +24,10 @@ app.use("/api/v1", routes);
 app.use("/api/upload", uploadRoutes);
 
 const authRoutes = require("./modules/auth/auth.routes");
+const adminRoutes = require("./modules/admin/admin.routes");
 
 app.use("/api/auth", authRoutes);
+app.use('/api/admin', adminRoutes)
 
 app.get("/", (req, res) => {
     res.send("Welcome to the API");

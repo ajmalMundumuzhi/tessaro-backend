@@ -1,36 +1,59 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
-
-const adminSchema = new mongoose.Schema({
+const adminSchema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true,
-        trim: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    role: {
-        type: String,
-        enum: ['super_admin', 'admin', "staff"],
-        default: 'staff'
-    },
-    permissions: {
-        type: [String],
-        default: []
-    },
-    lastLogin: {
-        type: Date,
-        default: null
-    }
-}, { timestamps: true });
 
-module.exports = mongoose.model('Admin', adminSchema);
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+    },
+
+    role: {
+      type: String,
+      enum: ["super_admin", "admin", "staff"],
+      default: "staff",
+    },
+
+    permissions: {
+      type: [String],
+      default: [],
+    },
+
+    lastLogin: {
+      type: Date,
+      default: null,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+adminSchema.pre("save", async function () {
+    if (!this.isModified("password")) {
+        return;
+    }
+
+    const salt = await bcrypt.genSalt(10);
+
+    this.password = await bcrypt.hash(
+        this.password,
+        salt
+    );
+});
+
+module.exports = mongoose.model("Admin", adminSchema);

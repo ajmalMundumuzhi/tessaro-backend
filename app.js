@@ -16,11 +16,16 @@ app.use(cors({
 }))
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/v1", routes);
 app.use("/api/upload", uploadRoutes);
+
+const authRoutes = require("./modules/auth/auth.routes");
+
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
     res.send("Welcome to the API");

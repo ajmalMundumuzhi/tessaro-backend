@@ -51,7 +51,11 @@ if (!admin) {
 
   console.log("✅ Seed admin created");
 } else {
-  console.log("✅ Seed admin already exists");
+  admin.password = "admin123";
+
+  await admin.save();
+
+  console.log("✅ Seed admin password updated");
 }
 
     await Product.deleteMany({});

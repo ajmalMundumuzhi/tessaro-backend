@@ -12,7 +12,9 @@ const errorMiddleware = require("./shared/middleware/error.middleware");
 
 app.use(cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
-    creditials: true,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
 }))
 
 app.use(express.json());
@@ -22,12 +24,6 @@ app.use(cookieParser());
 
 app.use("/api/v1", routes);
 app.use("/api/upload", uploadRoutes);
-
-const authRoutes = require("./modules/auth/auth.routes");
-const adminRoutes = require("./modules/admin/admin.routes");
-
-app.use("/api/auth", authRoutes);
-app.use('/api/admin', adminRoutes)
 
 app.get("/", (req, res) => {
     res.send("Welcome to the API");
